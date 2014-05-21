@@ -36,6 +36,7 @@ public class ComicCLI {
     public static void main(String[] args) {
         String appname = ComicCLI.class.getSimpleName();
         CommandLine line;
+        File direct = null;
 
         // create the parser
         CommandLineParser parser = new PosixParser();
@@ -60,7 +61,7 @@ public class ComicCLI {
                 formatter.printHelp(appname, options, true);
                 return;
             }
-            File direct = new File(line.getOptionValue("d"));
+            direct = new File(line.getOptionValue("d"));
             if (!direct.isDirectory()) {
                 System.err.println("Parsing failed. -d must be a directory.");
             }
@@ -68,6 +69,9 @@ public class ComicCLI {
             // oops, something went wrong
             System.err.println("Parsing failed.  Reason: " + exp.getMessage());
         }
+        
+        ComicLibrary cl = new ComicLibrary();
+        cl.getFileList(direct);
 
     }
 
