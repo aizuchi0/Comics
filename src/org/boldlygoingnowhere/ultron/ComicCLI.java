@@ -71,7 +71,7 @@ public class ComicCLI {
         }
         
         ComicLibrary cl = new ComicLibrary();
-        cl.getFileList(direct);
+        cl.setFileList(direct);
 
     }
 
