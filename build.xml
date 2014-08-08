@@ -70,4 +70,21 @@
     nbproject/build-impl.xml file. 
 
     -->
+    <property environment="env"/>
+    <property name="nbpkg-executable-full-path"
+              location="${env.NBPKG}"/>
+
+    <target name="-pre-jar">
+<!--        <delete>
+            <fileset dir="${CDFsrc}" includes="*.cdf"/>
+        </delete>
+        <apply executable="${cdf-executable-full-path}" dir="${CDFsrc}">
+            <fileset dir="${Skeletonsrc}" includes="*.skt"/>
+        </apply>-->
+    </target>
+    <target name="-post-jar">
+        <exec executable="${nbpkg-executable-full-path}" dir=".">
+        </exec>
+    </target>
+
 </project>
