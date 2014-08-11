@@ -72,6 +72,7 @@ public class ComicCLI {
         
         ComicLibrary cl = new ComicLibrary();
         cl.setFileList(direct);
+        System.out.println(cl.getFileList().size());
 
     }
 
