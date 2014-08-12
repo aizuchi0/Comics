@@ -70,9 +70,11 @@ public class ComicCLI {
             System.err.println("Parsing failed.  Reason: " + exp.getMessage());
         }
         
-        ComicLibrary cl = new ComicLibrary();
+        FileTree cl = new FileTree();
+        ComicRack cr = new ComicRack();
         cl.setFileList(direct);
-        System.out.println(cl.getFileList().size());
+        cr.loadComicRackXML(cl.getFileList().last());
+        cr.spitItOut();
 
     }
 
