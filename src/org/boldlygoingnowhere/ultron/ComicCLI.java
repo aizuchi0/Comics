@@ -18,6 +18,7 @@
 package org.boldlygoingnowhere.ultron;
 
 import java.io.File;
+import java.util.ArrayList;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -71,10 +72,14 @@ public class ComicCLI {
         }
         
         FileTree cl = new FileTree();
-        ComicRack cr = new ComicRack();
+        ArrayList<ComicInfo> ci = new ArrayList<>();
         cl.setFileList(direct);
-        cr.loadComicRackXML(cl.getFileList().last());
-        cr.spitItOut();
+        for (File temp : cl.getFileList()) {
+            ComicInfo temp2 = new ComicRack().loadComicRackXML(temp);
+            ci.add(temp2);
+            System.out.println(temp.getName() + " " + ci.size());
+        }
+        
 
     }
 
