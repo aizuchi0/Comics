@@ -18,7 +18,11 @@
 package org.boldlygoingnowhere.ultron;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -91,12 +95,22 @@ public class ComicCLI {
         ArrayList<ComicInfo> ci = new ArrayList<>();
         cl.setFileList(direct);
         for (File temp : cl.getFileList()) {
-            ComicInfo temp2 = new ComicRack().loadComicRackXML(temp);
-            ci.add(temp2);
-            System.out.println(temp.getName() + " " + ci.size());
+            ComicInfo comicBook = new ComicRack().loadComicRackXML(temp);
+            if (comicBook == null) {
+                System.err.println("\"" + temp + "\" has no ComicInfo; skipping.");
+                continue;
+            }
+            ci.add(comicBook);
+            System.out.println("Move \"" + temp.getName() + "\" to \"" + outputDir.toString() + File.separator + comicBook.series + "\"");
+            File destDir = new File(outputDir.toString() + File.separator + comicBook.series);
+            destDir.mkdirs();
+            File destFile = new File(outputDir.toString() + File.separator + comicBook.series + File.separator + temp.getName());
+            try {
+                Files.move(temp.toPath(), destFile.toPath());
+            } catch (IOException ex) {
+                System.err.println("Couldn't move file \"" + temp.toString()+"\"");
+            }
         }
-        
-
     }
 
 }
