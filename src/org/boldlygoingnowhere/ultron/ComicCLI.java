@@ -38,6 +38,7 @@ public class ComicCLI {
         String appname = ComicCLI.class.getSimpleName();
         CommandLine line;
         File direct = null;
+        File outputDir = null;
 
         // create the parser
         CommandLineParser parser = new PosixParser();
@@ -46,6 +47,8 @@ public class ComicCLI {
         options.addOption("h", "help", false, "Display this help message");
         options.addOption("d", "directory", true, "The directory to scan");
         options.getOption("d").setRequired(true); //File is mandatory.
+        options.addOption("o", "output directory", true, "The directory to sort archives into");
+        options.getOption("o").setRequired(true); //File is mandatory.
         // automatically generate the help statement
         HelpFormatter formatter = new HelpFormatter();
 
@@ -65,6 +68,19 @@ public class ComicCLI {
             direct = new File(line.getOptionValue("d"));
             if (!direct.isDirectory()) {
                 System.err.println("Parsing failed. -d must be a directory.");
+            }
+            if (!line.hasOption("o")) {
+                System.err.println("Directory option (-o) must be specified!");
+                formatter.printHelp(appname, options, true);
+                return;
+            }
+            outputDir = new File(line.getOptionValue("o"));
+            if (!outputDir.exists()) {
+                System.err.println("Output directory does not exist; creating now");
+                outputDir.mkdirs();
+            }
+            if (!outputDir.isDirectory()) {
+                System.err.println("Parsing failed. -o must be a directory.");
             }
         } catch (org.apache.commons.cli.ParseException exp) {
             // oops, something went wrong
