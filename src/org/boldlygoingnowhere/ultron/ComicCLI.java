@@ -22,7 +22,9 @@ import static java.io.File.separator;
 import java.io.IOException;
 import static java.lang.System.err;
 import static java.lang.System.out;
+import java.nio.file.FileAlreadyExistsException;
 import static java.nio.file.Files.move;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -43,6 +45,7 @@ public class ComicCLI {
         CommandLine line;
         File direct = null;
         File outputDir = null;
+        Boolean overWrite = false;
 
         // create the parser
         CommandLineParser parser = new PosixParser();
@@ -53,6 +56,7 @@ public class ComicCLI {
         options.getOption("d").setRequired(true); //File is mandatory.
         options.addOption("o", "output directory", true, "The directory to sort archives into");
         options.getOption("o").setRequired(true); //File is mandatory.
+        options.addOption("R", "overwrite", false, "When moving files, clobber any existing files.");
         // automatically generate the help statement
         HelpFormatter formatter = new HelpFormatter();
 
@@ -63,6 +67,10 @@ public class ComicCLI {
             if (line.hasOption("h")) {
                 formatter.printHelp(appname, options, true);
                 return;
+            }
+            if (line.hasOption("R")) {
+                overWrite = true;
+                out.println("Turning on overwrite; will clobber files.");
             }
             if (!line.hasOption("d")) {
                 err.println("Directory option (-d) must be specified!");
@@ -102,14 +110,20 @@ public class ComicCLI {
             }
             assert comicBook != null;
             assert temp != null;
-            out.println("Move \"" + temp.getName() + "\" to \"" + outputDir.toString() + separator + comicBook.series + "\"");
             File destDir = new File(outputDir.toString() + separator + comicBook.series);
             destDir.mkdirs();
             File destFile = new File(outputDir.toString() + separator + comicBook.series + separator + temp.getName());
             try {
-                move(temp.toPath(), destFile.toPath());
+                out.println("Move \"" + temp.getCanonicalPath() + "\" to \"" + destFile.getCanonicalPath() + "\"");
+                if (overWrite) {
+                    move(temp.toPath(), destFile.toPath(), REPLACE_EXISTING);
+                } else {
+                    move(temp.toPath(), destFile.toPath());
+                }
+            } catch (FileAlreadyExistsException ex) {
+                err.println("File: " + temp.toString() + " already exists. Retry with -R to clobber.");
             } catch (IOException ex) {
-                err.println("Couldn't move file \"" + temp.toString() + "\"");
+                err.println("Couldn't move file \"" + destFile.toString() + "\"");
             }
         }
     }
