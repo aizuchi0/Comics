@@ -18,9 +18,11 @@
 package org.boldlygoingnowhere.ultron;
 
 import java.io.File;
+import static java.io.File.separator;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.util.ArrayList;
+import static java.lang.System.err;
+import static java.lang.System.out;
+import static java.nio.file.Files.move;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -63,50 +65,51 @@ public class ComicCLI {
                 return;
             }
             if (!line.hasOption("d")) {
-                System.err.println("Directory option (-d) must be specified!");
+                err.println("Directory option (-d) must be specified!");
                 formatter.printHelp(appname, options, true);
                 return;
             }
             direct = new File(line.getOptionValue("d"));
             if (!direct.isDirectory()) {
-                System.err.println("Parsing failed. -d must be a directory.");
+                err.println("Parsing failed. -d must be a directory.");
             }
             if (!line.hasOption("o")) {
-                System.err.println("Directory option (-o) must be specified!");
+                err.println("Directory option (-o) must be specified!");
                 formatter.printHelp(appname, options, true);
                 return;
             }
             outputDir = new File(line.getOptionValue("o"));
             if (!outputDir.exists()) {
-                System.err.println("Output directory does not exist; creating now");
+                err.println("Output directory does not exist; creating now");
                 outputDir.mkdirs();
             }
             if (!outputDir.isDirectory()) {
-                System.err.println("Parsing failed. -o must be a directory.");
+                err.println("Parsing failed. -o must be a directory.");
             }
         } catch (org.apache.commons.cli.ParseException exp) {
             // oops, something went wrong
-            System.err.println("Parsing failed.  Reason: " + exp.getMessage());
+            err.println("Parsing failed.  Reason: " + exp.getMessage());
         }
-        
+
+        assert outputDir != null;
         FileTree cl = new FileTree();
-        ArrayList<ComicInfo> ci = new ArrayList<>();
         cl.setFileList(direct);
         for (File temp : cl.getFileList()) {
             ComicInfo comicBook = new ComicRack().loadComicRackXML(temp);
             if (comicBook == null) {
-                System.err.println("\"" + temp + "\" has no ComicInfo; skipping.");
+                err.println("\"" + temp + "\" has no ComicInfo; skipping.");
                 continue;
             }
-            ci.add(comicBook);
-            System.out.println("Move \"" + temp.getName() + "\" to \"" + outputDir.toString() + File.separator + comicBook.series + "\"");
-            File destDir = new File(outputDir.toString() + File.separator + comicBook.series);
+            assert comicBook != null;
+            assert temp != null;
+            out.println("Move \"" + temp.getName() + "\" to \"" + outputDir.toString() + separator + comicBook.series + "\"");
+            File destDir = new File(outputDir.toString() + separator + comicBook.series);
             destDir.mkdirs();
-            File destFile = new File(outputDir.toString() + File.separator + comicBook.series + File.separator + temp.getName());
+            File destFile = new File(outputDir.toString() + separator + comicBook.series + separator + temp.getName());
             try {
-                Files.move(temp.toPath(), destFile.toPath());
+                move(temp.toPath(), destFile.toPath());
             } catch (IOException ex) {
-                System.err.println("Couldn't move file \"" + temp.toString()+"\"");
+                err.println("Couldn't move file \"" + temp.toString() + "\"");
             }
         }
     }
