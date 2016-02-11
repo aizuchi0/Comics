@@ -72,7 +72,7 @@
     -->
     <property environment="env"/>
     <property name="nbpkg-executable-full-path"
-              location="${env.NBPKG}"/>
+            location="/Users/dgcrawfo/bin/nbpkg.sh"/>
 
     <target name="-pre-jar">
 <!--        <delete>
