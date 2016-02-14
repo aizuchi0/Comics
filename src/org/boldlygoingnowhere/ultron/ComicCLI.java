@@ -102,26 +102,28 @@ public class ComicCLI {
         assert outputDir != null;
         FileTree cl = new FileTree();
         cl.setFileList(direct);
-        for (File temp : cl.getFileList()) {
-            ComicInfo comicBook = new ComicRack().loadComicRackXML(temp);
+        for (File currentComic : cl.getFileList()) {
+            ComicInfo comicBook = new ComicRack().loadComicRackXML(currentComic);
             if (comicBook == null) {
-                err.println("\"" + temp + "\" has no ComicInfo; skipping.");
+                err.println("\"" + currentComic + "\" has no ComicInfo; skipping.");
                 continue;
             }
             assert comicBook != null;
-            assert temp != null;
-            File destDir = new File(outputDir.toString() + separator + comicBook.series);
+            assert currentComic != null;
+            String series = comicBook.series.replaceAll(":", "：");
+            File destDir = new File(outputDir.toString() + separator + series);
             destDir.mkdirs();
-            File destFile = new File(outputDir.toString() + separator + comicBook.series + separator + temp.getName());
+            String newName = currentComic.getName().replaceAll(":", "：");
+            File destFile = new File(outputDir.toString() + separator + series + separator + newName);
             try {
-                out.println("Move \"" + temp.getCanonicalPath() + "\" to \"" + destFile.getCanonicalPath() + "\"");
+                out.println("Move \"" + currentComic.getCanonicalPath() + "\" to \"" + destFile.getCanonicalPath() + "\"");
                 if (overWrite) {
-                    move(temp.toPath(), destFile.toPath(), REPLACE_EXISTING);
+                    move(currentComic.toPath(), destFile.toPath(), REPLACE_EXISTING);
                 } else {
-                    move(temp.toPath(), destFile.toPath());
+                    move(currentComic.toPath(), destFile.toPath());
                 }
             } catch (FileAlreadyExistsException ex) {
-                err.println("File: " + temp.toString() + " already exists. Retry with -R to clobber.");
+                err.println("File: " + newName + " already exists. Retry with -R to clobber.");
             } catch (IOException ex) {
                 err.println("Couldn't move file \"" + destFile.toString() + "\"");
             }
