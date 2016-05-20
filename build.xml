@@ -71,20 +71,22 @@
 
     -->
     <property environment="env"/>
-    <property name="nbpkg-executable-full-path"
-            location="/Users/dgcrawfo/bin/nbpkg.sh"/>
+    <property file="src/org/boldlygoingnowhere/ultron/local.properties"/>
 
-    <target name="-pre-jar">
-<!--        <delete>
-            <fileset dir="${CDFsrc}" includes="*.cdf"/>
-        </delete>
-        <apply executable="${cdf-executable-full-path}" dir="${CDFsrc}">
-            <fileset dir="${Skeletonsrc}" includes="*.skt"/>
-        </apply>-->
-    </target>
     <target name="-post-jar">
-        <exec executable="${nbpkg-executable-full-path}" dir=".">
-        </exec>
+        <buildnumber/>
+        <java classname="edu.uiowa.physics.installer.JumboJar" dir=".">
+            <arg value="${application.major_version}.${application.minor_version}.${build.number}"/>
+            <classpath>
+                <pathelement location="dist/lib/JumboJar.jar"/>
+                <pathelement path="${java.class.path}"/>
+            </classpath>
+        </java>
+    </target>
+    <target name="-post-clean">
+        <delete>
+            <fileset dir="." includes="*.jar.sh"/>
+        </delete>
     </target>
 
 </project>
