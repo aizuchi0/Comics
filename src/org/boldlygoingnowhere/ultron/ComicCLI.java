@@ -25,6 +25,7 @@ import static java.lang.System.out;
 import java.nio.file.FileAlreadyExistsException;
 import static java.nio.file.Files.move;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import java.util.Locale;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -121,7 +122,11 @@ public class ComicCLI {
             String series = comicBook.series.replaceAll(":", "：");
             File destDir = new File(outputDir.toString() + separator + series);
             destDir.mkdirs();
-            String newName = currentComic.getName().replaceAll(":", "：");
+            //Template from comictagger for file rename: %series% (%year%) #%issue% - %title%
+            //Bad charactersare '\ / : * ? " < > |'
+            String newName = comicBook.series + " (" + comicBook.year + ") #"
+                    + formatIssue(comicBook.number) + " - " + comicBook.title + ".cbz";
+            newName = newName.replaceAll(":", "：");
             File destFile = new File(outputDir.toString() + separator + series + separator + newName);
             try {
                 out.println("Move \"" + currentComic.getCanonicalPath() + "\" to \"" + destFile.getCanonicalPath() + "\"");
@@ -144,6 +149,17 @@ public class ComicCLI {
                 err.println("IOException on file \"" + destFile.toString() + "\"");
             }
         }
+    }
+
+    private static String formatIssue(String issueNumber) {
+        String fixedNumber;
+        try {
+            int rawInt = Integer.parseInt(issueNumber);
+            fixedNumber = String.format(Locale.US, "%03d", rawInt);
+        } catch (NumberFormatException ex) {
+            fixedNumber = issueNumber;
+        }
+        return fixedNumber;
     }
 
 }
