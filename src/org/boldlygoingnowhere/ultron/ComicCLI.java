@@ -37,6 +37,9 @@ import org.apache.commons.cli.PosixParser;
  */
 public class ComicCLI {
 
+    private static boolean keepLarger = false;
+    private static boolean overWrite = false;
+
     /**
      * @param args the command line arguments
      */
@@ -45,7 +48,6 @@ public class ComicCLI {
         CommandLine line;
         File direct = null;
         File outputDir = null;
-        Boolean overWrite = false;
 
         // create the parser
         CommandLineParser parser = new PosixParser();
@@ -57,6 +59,7 @@ public class ComicCLI {
         options.addOption("o", "output directory", true, "The directory to sort archives into");
         options.getOption("o").setRequired(true); //File is mandatory.
         options.addOption("R", "overwrite", false, "When moving files, clobber any existing files.");
+        options.addOption("L", "keep-larger", false, "When moving files, overwrite if -d file is larger than -o file.");
         // automatically generate the help statement
         HelpFormatter formatter = new HelpFormatter();
 
@@ -71,6 +74,11 @@ public class ComicCLI {
             if (line.hasOption("R")) {
                 overWrite = true;
                 out.println("Turning on overwrite; will clobber files.");
+            }
+            if (line.hasOption("L")) {
+                overWrite = false;
+                keepLarger = true;
+                out.println("Turning on keep_larger; will clobber files.");
             }
             if (!line.hasOption("d")) {
                 err.println("Directory option (-d) must be specified!");
@@ -117,6 +125,14 @@ public class ComicCLI {
             File destFile = new File(outputDir.toString() + separator + series + separator + newName);
             try {
                 out.println("Move \"" + currentComic.getCanonicalPath() + "\" to \"" + destFile.getCanonicalPath() + "\"");
+                if (keepLarger) {
+                    //If keepLarger, check for larger file. If currentComic is larger, REPLACE_EXISTING. Otherwise, keep destFile.
+                    if(currentComic.length() > destFile.length() || ! destFile.exists()) {
+                        move(currentComic.toPath(), destFile.toPath(), REPLACE_EXISTING);
+                    } else {
+                        currentComic.delete();
+                    }
+                }
                 if (overWrite) {
                     move(currentComic.toPath(), destFile.toPath(), REPLACE_EXISTING);
                 } else {
@@ -125,7 +141,7 @@ public class ComicCLI {
             } catch (FileAlreadyExistsException ex) {
                 err.println("File: " + newName + " already exists. Retry with -R to clobber.");
             } catch (IOException ex) {
-                err.println("Couldn't move file \"" + destFile.toString() + "\"");
+                err.println("IOException on file \"" + destFile.toString() + "\"");
             }
         }
     }
