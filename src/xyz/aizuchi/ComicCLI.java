@@ -127,8 +127,9 @@ public class ComicCLI {
             destDir.mkdirs();
             //Template from comictagger for file rename: %series% (%year%) #%issue% - %title%
             //Bad charactersare '\ / : * ? " < > |'
-            String newName = comicBook.getSeries() + " (" + comicBook.getYear() + ") #"
-                    + formatIssue(comicBook.getNumber()) + " - " + comicBook.getTitle() + ".cbz";
+            String newName = comicBook.getSeries() + " (" + ComicRack.getYear(comicBook) + ") #"
+                    + ComicRack.formatIssue(comicBook.getNumber())
+                    + ComicRack.getTitle(comicBook) + ".cbz";
             newName = newName.replaceAll(":", "：");
             File destFile = new File(outputDir.toString() + separator + series + separator + newName);
             try {
@@ -154,15 +155,5 @@ public class ComicCLI {
         }
     }
 
-    private static String formatIssue(String issueNumber) {
-        String fixedNumber;
-        try {
-            int rawInt = Integer.parseInt(issueNumber);
-            fixedNumber = String.format(Locale.US, "%03d", rawInt);
-        } catch (NumberFormatException ex) {
-            fixedNumber = issueNumber;
-        }
-        return fixedNumber;
-    }
 
 }
