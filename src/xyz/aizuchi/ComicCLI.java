@@ -15,8 +15,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.boldlygoingnowhere.ultron;
+package xyz.aizuchi;
 
+import xyz.aizuchi.ComicInfo;
+import xyz.aizuchi.FileTree;
+import xyz.aizuchi.ComicRack;
 import java.io.File;
 import static java.io.File.separator;
 import java.io.IOException;
