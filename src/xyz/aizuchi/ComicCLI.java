@@ -17,9 +17,9 @@
  */
 package xyz.aizuchi;
 
-import xyz.aizuchi.ComicInfo;
-import xyz.aizuchi.FileTree;
-import xyz.aizuchi.ComicRack;
+import xyz.aizuchi.comicrack.ComicInfo;
+import xyz.aizuchi.comicrack.FileTree;
+import xyz.aizuchi.utility.ComicRack;
 import java.io.File;
 import static java.io.File.separator;
 import java.io.IOException;
@@ -122,13 +122,13 @@ public class ComicCLI {
             }
             assert comicBook != null;
             assert currentComic != null;
-            String series = comicBook.series.replaceAll(":", "：");
+            String series = comicBook.getSeries().replaceAll(":", "：");
             File destDir = new File(outputDir.toString() + separator + series);
             destDir.mkdirs();
             //Template from comictagger for file rename: %series% (%year%) #%issue% - %title%
             //Bad charactersare '\ / : * ? " < > |'
-            String newName = comicBook.series + " (" + comicBook.year + ") #"
-                    + formatIssue(comicBook.number) + " - " + comicBook.title + ".cbz";
+            String newName = comicBook.getSeries() + " (" + comicBook.getYear() + ") #"
+                    + formatIssue(comicBook.getNumber()) + " - " + comicBook.getTitle() + ".cbz";
             newName = newName.replaceAll(":", "：");
             File destFile = new File(outputDir.toString() + separator + series + separator + newName);
             try {
