@@ -28,12 +28,12 @@ import static java.lang.System.out;
 import java.nio.file.FileAlreadyExistsException;
 import static java.nio.file.Files.move;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-import java.util.Locale;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
+import static xyz.aizuchi.utility.ComicRack.formatCBName;
 
 /**
  *
@@ -125,18 +125,12 @@ public class ComicCLI {
             String series = comicBook.getSeries().replaceAll(":", "：");
             File destDir = new File(outputDir.toString() + separator + series);
             destDir.mkdirs();
-            //Template from comictagger for file rename: %series% (%year%) #%issue% - %title%
-            //Bad charactersare '\ / : * ? " < > |'
-            String newName = comicBook.getSeries() + " (" + ComicRack.getYear(comicBook) + ") #"
-                    + ComicRack.formatIssue(comicBook.getNumber())
-                    + ComicRack.getTitle(comicBook) + ".cbz";
-            newName = newName.replaceAll(":", "：");
-            File destFile = new File(outputDir.toString() + separator + series + separator + newName);
+            File destFile = new File(outputDir.toString() + separator + series + separator + formatCBName(comicBook));
             try {
                 out.println("Move \"" + currentComic.getCanonicalPath() + "\" to \"" + destFile.getCanonicalPath() + "\"");
                 if (keepLarger) {
                     //If keepLarger, check for larger file. If currentComic is larger, REPLACE_EXISTING. Otherwise, keep destFile.
-                    if(currentComic.length() > destFile.length() || ! destFile.exists()) {
+                    if (currentComic.length() > destFile.length() || !destFile.exists()) {
                         move(currentComic.toPath(), destFile.toPath(), REPLACE_EXISTING);
                     } else {
                         currentComic.delete();
@@ -148,12 +142,11 @@ public class ComicCLI {
                     move(currentComic.toPath(), destFile.toPath());
                 }
             } catch (FileAlreadyExistsException ex) {
-                err.println("File: " + newName + " already exists. Retry with -R to clobber.");
+                err.println("File: " + destFile.toString() + " already exists. Retry with -R to clobber.");
             } catch (IOException ex) {
                 err.println("IOException on file \"" + destFile.toString() + "\"");
             }
         }
     }
-
 
 }
