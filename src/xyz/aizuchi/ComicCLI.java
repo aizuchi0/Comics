@@ -122,7 +122,7 @@ public class ComicCLI {
             }
             assert comicBook != null;
             assert currentComic != null;
-            String series = comicBook.getSeries().replaceAll(":", "：");
+            String series = comicBook.getSeries().replaceAll("[^a-zA-Z0-9\\._]+", "_");
             File destDir = new File(outputDir.toString() + separator + series);
             destDir.mkdirs();
             File destFile = new File(outputDir.toString() + separator + series + separator + formatCBName(comicBook));
