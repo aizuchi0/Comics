@@ -78,7 +78,7 @@
         <java classname="edu.uiowa.physics.installer.JumboJar" dir=".">
             <arg value="${application.major_version}.${application.minor_version}.${build.number}"/>
             <classpath>
-                <pathelement location="dist/lib/JumboJar.jar"/>
+                <pathelement location="dist/JumboJar.jar"/>
                 <pathelement path="${java.class.path}"/>
             </classpath>
         </java>
