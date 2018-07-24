@@ -23,11 +23,11 @@ import xyz.aizuchi.utility.ComicRack;
 import java.io.File;
 import static java.io.File.separator;
 import java.io.IOException;
-import static java.lang.System.err;
-import static java.lang.System.out;
 import java.nio.file.FileAlreadyExistsException;
 import static java.nio.file.Files.move;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -43,6 +43,7 @@ public class ComicCLI {
 
     private static boolean keepLarger = false;
     private static boolean overWrite = false;
+    static final Logger WOODY = Logger.getLogger("xyz.aizuchi.ComicCLI");
 
     /**
      * @param args the command line arguments
@@ -77,38 +78,38 @@ public class ComicCLI {
             }
             if (line.hasOption("R")) {
                 overWrite = true;
-                out.println("Turning on overwrite; will clobber files.");
+                WOODY.log(Level.INFO,"Turning on overwrite; will clobber files.");
             }
             if (line.hasOption("L")) {
                 overWrite = false;
                 keepLarger = true;
-                out.println("Turning on keep_larger; will clobber files.");
+                WOODY.log(Level.INFO,"Turning on keep_larger; will clobber files.");
             }
             if (!line.hasOption("d")) {
-                err.println("Directory option (-d) must be specified!");
+                WOODY.log(Level.SEVERE,"Directory option (-d) must be specified!");
                 formatter.printHelp(appname, options, true);
                 return;
             }
             direct = new File(line.getOptionValue("d"));
             if (!direct.isDirectory()) {
-                err.println("Parsing failed. -d must be a directory.");
+                WOODY.log(Level.SEVERE,"Parsing failed. -d must be a directory.");
             }
             if (!line.hasOption("o")) {
-                err.println("Directory option (-o) must be specified!");
+                WOODY.log(Level.SEVERE,"Directory option (-o) must be specified!");
                 formatter.printHelp(appname, options, true);
                 return;
             }
             outputDir = new File(line.getOptionValue("o"));
             if (!outputDir.exists()) {
-                err.println("Output directory does not exist; creating now");
+                WOODY.log(Level.SEVERE,"Output directory does not exist; creating now");
                 outputDir.mkdirs();
             }
             if (!outputDir.isDirectory()) {
-                err.println("Parsing failed. -o must be a directory.");
+                WOODY.log(Level.SEVERE,"Parsing failed. -o must be a directory.");
             }
         } catch (org.apache.commons.cli.ParseException exp) {
             // oops, something went wrong
-            err.println("Parsing failed.  Reason: " + exp.getMessage());
+            WOODY.log(Level.SEVERE, "Parsing failed.  Reason: {0}", exp.getMessage());
         }
 
         assert outputDir != null;
@@ -117,34 +118,40 @@ public class ComicCLI {
         for (File currentComic : cl.getFileList()) {
             ComicInfo comicBook = new ComicRack().loadComicRackXML(currentComic);
             if (comicBook == null) {
-                err.println("\"" + currentComic + "\" has no ComicInfo; skipping.");
+                WOODY.log(Level.INFO, "\"{0}\" has no ComicInfo; skipping.", currentComic);
                 continue;
             }
-            assert comicBook != null;
             assert currentComic != null;
-            String series = comicBook.getSeries().replaceAll("[^a-zA-Z0-9\\._]+", "_");
-            File destDir = new File(outputDir.toString() + separator + series);
-            destDir.mkdirs();
-            File destFile = new File(outputDir.toString() + separator + series + separator + formatCBName(comicBook));
+            String series;
             try {
-                out.println("Move \"" + currentComic.getCanonicalPath() + "\" to \"" + destFile.getCanonicalPath() + "\"");
-                if (keepLarger) {
-                    //If keepLarger, check for larger file. If currentComic is larger, REPLACE_EXISTING. Otherwise, keep destFile.
-                    if (currentComic.length() > destFile.length() || !destFile.exists()) {
+                series = comicBook.getSeries().replaceAll("[^a-zA-Z0-9\\._]+", "_");
+                assert series != null;
+                File destDir = new File(outputDir.toString() + separator + series);
+                destDir.mkdirs();
+                File destFile = new File(outputDir.toString() + separator + series + separator + formatCBName(comicBook));
+                try {
+                    WOODY.log(Level.INFO, "Move \"{0}\" to \"{1}\"", new Object[]{currentComic.getCanonicalPath(), destFile.getCanonicalPath()});
+                    if (keepLarger) {
+                        //If keepLarger, check for larger file. If currentComic is larger, REPLACE_EXISTING. Otherwise, keep destFile.
+                        if (currentComic.length() > destFile.length() || !destFile.exists()) {
+                            move(currentComic.toPath(), destFile.toPath(), REPLACE_EXISTING);
+                        } else {
+                            currentComic.delete();
+                        }
+                    }
+                    if (overWrite) {
                         move(currentComic.toPath(), destFile.toPath(), REPLACE_EXISTING);
                     } else {
-                        currentComic.delete();
+                        move(currentComic.toPath(), destFile.toPath());
                     }
+                } catch (FileAlreadyExistsException ex) {
+                    WOODY.log(Level.SEVERE, "File: {0} already exists. Retry with -R to clobber.", destFile.toString());
+                } catch (IOException ex) {
+                    WOODY.log(Level.SEVERE, "IOException on file \"{0}\"", destFile.toString());
                 }
-                if (overWrite) {
-                    move(currentComic.toPath(), destFile.toPath(), REPLACE_EXISTING);
-                } else {
-                    move(currentComic.toPath(), destFile.toPath());
-                }
-            } catch (FileAlreadyExistsException ex) {
-                err.println("File: " + destFile.toString() + " already exists. Retry with -R to clobber.");
-            } catch (IOException ex) {
-                err.println("IOException on file \"" + destFile.toString() + "\"");
+            } catch (NullPointerException e) {
+                WOODY.log(Level.SEVERE, "{0} is bad!", currentComic);
+//                e.printStackTrace();
             }
         }
     }
