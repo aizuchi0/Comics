@@ -30,9 +30,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
-import org.apache.commons.cli.PosixParser;
 import static xyz.aizuchi.utility.ComicRack.formatCBName;
 
 /**
@@ -55,7 +55,7 @@ public class ComicCLI {
         File outputDir = null;
 
         // create the parser
-        CommandLineParser parser = new PosixParser();
+        CommandLineParser parser = new DefaultParser();
 
         Options options = new Options();
         options.addOption("h", "help", false, "Display this help message");

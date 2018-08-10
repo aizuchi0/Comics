@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<ComicInfo xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Title>Mayhem On Mystery Mile!</Title>
+  <Series>1963</Series>
+  <Number>1</Number>
+  <Summary>The first comic book in the "1963" series, this one features the introduction of "Mystery, Incorporated", a team which is analogous to the Fantastic Four, and involves the discovery of a mysterious masked intruder who invades their headquarters via an underground entrance called the "Miracle Mile".   The four have to evade their own traps to find the mysterious intruder and fellow teammate "Kid Dynamo" whom ends up missing.</Summary>
+  <Notes>Tagged with ComicTagger 1.1.12-beta using info from Comic Vine on 2014-04-04 21:16:22.  [Issue ID 37071]</Notes>
+  <Year>1993</Year>
+  <Month>4</Month>
+  <Day>01</Day>
+  <Writer>Alan Moore</Writer>
+  <Penciller>Rick Veitch</Penciller>
+  <Inker>Dave Gibbons</Inker>
+  <Colorist>Marvin Kilroy</Colorist>
+  <Letterer>Don Simpson</Letterer>
+  <CoverArtist>Dave Gibbons, Rick Veitch</CoverArtist>
+  <Publisher>Image</Publisher>
+  <Web>http://www.comicvine.com/1963-1-mayhem-on-mystery-mile/4000-37071/</Web>
+  <PageCount>30</PageCount>
+  <Characters>Crystal Man, Kid Dynamo, Neon Queen, Planet, The Fury</Characters>
+  <Teams>Mystery Incorporated</Teams>
+  <Pages>
+    <Page Image="0" ImageHeight="1265" ImageSize="334693" ImageWidth="820" Type="FrontCover" />
+    <Page Image="1" ImageHeight="1226" ImageSize="261673" ImageWidth="820" />
+    <Page Image="2" ImageHeight="1226" ImageSize="271817" ImageWidth="820" />
+    <Page Image="3" ImageHeight="1226" ImageSize="282518" ImageWidth="820" />
+    <Page Image="4" ImageHeight="1226" ImageSize="289284" ImageWidth="820" />
+    <Page Image="5" ImageHeight="1226" ImageSize="276764" ImageWidth="820" />
+    <Page Image="6" ImageHeight="1226" ImageSize="263417" ImageWidth="820" />
+    <Page Image="7" ImageHeight="1226" ImageSize="278229" ImageWidth="820" />
+    <Page Image="8" ImageHeight="1226" ImageSize="270141" ImageWidth="820" />
+    <Page Image="9" ImageHeight="1226" ImageSize="263069" ImageWidth="820" />
+    <Page Image="10" ImageHeight="1226" ImageSize="289695" ImageWidth="820" />
+    <Page Image="11" ImageHeight="1226" ImageSize="273637" ImageWidth="820" />
+    <Page Image="12" ImageHeight="1226" ImageSize="270644" ImageWidth="820" />
+    <Page Image="13" ImageHeight="1226" ImageSize="284903" ImageWidth="820" />
+    <Page Image="14" ImageHeight="1226" ImageSize="282431" ImageWidth="820" />
+    <Page Image="15" ImageHeight="1226" ImageSize="265166" ImageWidth="820" />
+    <Page Image="16" ImageHeight="1226" ImageSize="289713" ImageWidth="820" />
+    <Page Image="17" ImageHeight="1226" ImageSize="279549" ImageWidth="820" />
+    <Page Image="18" ImageHeight="1218" ImageSize="276172" ImageWidth="820" />
+    <Page Image="19" ImageHeight="1218" ImageSize="275017" ImageWidth="820" />
+    <Page Image="20" ImageHeight="1218" ImageSize="278318" ImageWidth="820" />
+    <Page Image="21" ImageHeight="1218" ImageSize="288101" ImageWidth="820" />
+    <Page Image="22" ImageHeight="1218" ImageSize="278179" ImageWidth="820" />
+    <Page Image="23" ImageHeight="1218" ImageSize="288169" ImageWidth="820" />
+    <Page Image="24" ImageHeight="1218" ImageSize="261920" ImageWidth="820" />
+    <Page Image="25" ImageHeight="1218" ImageSize="310891" ImageWidth="820" />
+    <Page Image="26" ImageHeight="1218" ImageSize="261068" ImageWidth="820" />
+    <Page Image="27" ImageHeight="1218" ImageSize="315371" ImageWidth="820" />
+    <Page Image="28" ImageHeight="1218" ImageSize="230483" ImageWidth="820" />
+    <Page Image="29" ImageHeight="1218" ImageSize="261080" ImageWidth="820" />
+  </Pages>
+</ComicInfo>

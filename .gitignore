@@ -1,3 +1,4 @@
 /dist/
 /build/
 /ComicCLI-signed-standalone*jar.sh
+/nbproject/private/
