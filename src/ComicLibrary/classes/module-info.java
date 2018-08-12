@@ -4,9 +4,9 @@
  * and open the template in the editor.
  */
 module ComicLibrary {
-    requires jaxb.api;
     requires java.logging;
-    requires java.xml;
+    requires java.xml.bind;
     exports xyz.aizuchi.comicrack;
     exports xyz.aizuchi.utility;
+    opens xyz.aizuchi.comicrack;
 }
