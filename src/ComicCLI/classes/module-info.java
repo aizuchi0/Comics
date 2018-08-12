@@ -6,6 +6,6 @@
 module ComicCLI {
     requires java.logging;
     requires ComicLibrary;
-    requires jaxb.api;
+    requires java.xml.bind;
     requires commons.cli;
 }
