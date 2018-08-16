@@ -53,7 +53,7 @@ public class ComicCLI {
         CommandLine line;
         File direct = null;
         File outputDir = null;
-
+        
         // create the parser
         CommandLineParser parser = new DefaultParser();
 
