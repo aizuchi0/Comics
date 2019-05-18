@@ -17,6 +17,12 @@
  */
 package xyz.aizuchi.comicutility;
 
+import java.io.File;
+import java.util.logging.Level;
+import xyz.aizuchi.comicrack.ComicInfo;
+import xyz.aizuchi.comicrack.FileTree;
+import static xyz.aizuchi.comicutility.Organize.WOODY;
+
 /**
  *
  * @author Daniel Crawford <daniel-crawford@uiowa.edu>
@@ -24,7 +30,16 @@ package xyz.aizuchi.comicutility;
 public class Server {
 
     public static void startServer() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        FileTree cl = new FileTree();
+        cl.setFileList(new File("/Users/dgcrawfo/Comics"));
+        cl.getFileList().forEach((comicFile) -> {
+            ComicInfo comicBook = new ComicRack().loadComicRackXML(comicFile);
+            if (comicBook == null) {
+                WOODY.log(Level.INFO, "\"{0}\" has no ComicInfo; skipping.", comicFile);
+            }
+            assert comicBook != null;
+            System.out.println(comicBook.getSeries());
+        });
     }
-    
+
 }
