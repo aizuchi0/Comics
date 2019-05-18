@@ -7,6 +7,6 @@ module ComicLibrary {
     requires java.logging;
     requires java.xml.bind;
     exports xyz.aizuchi.comicrack;
-    exports xyz.aizuchi.utility;
+    exports xyz.aizuchi.comicutility;
     opens xyz.aizuchi.comicrack;
 }

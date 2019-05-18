@@ -25,7 +25,8 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
-import static xyz.aizuchi.utility.Organize.moveComics;
+import static xyz.aizuchi.comicutility.Organize.moveComics;
+import xyz.aizuchi.comicutility.Server;
 
 /**
  *
@@ -57,6 +58,7 @@ public class ComicCLI {
         options.getOption("o").setRequired(true); //File is mandatory.
         options.addOption("R", "overwrite", false, "When moving files, clobber any existing files.");
         options.addOption("L", "keep-larger", false, "When moving files, overwrite if -d file is larger than -o file.");
+        options.addOption("S", "Server", false, "Start the comics server.");
         // automatically generate the help statement
         HelpFormatter formatter = new HelpFormatter();
 
@@ -67,6 +69,10 @@ public class ComicCLI {
             if (line.hasOption("h")) {
                 formatter.printHelp(appname, options, true);
                 return;
+            }
+            if (line.hasOption("S")) {
+                //Start the server
+                Server.startServer();
             }
             if (line.hasOption("R")) {
                 overWrite = true;
@@ -106,5 +112,4 @@ public class ComicCLI {
 
         moveComics( direct,  outputDir,  keepLarger,  overWrite);
     }
-
 }

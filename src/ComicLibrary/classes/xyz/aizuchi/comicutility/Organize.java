@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package xyz.aizuchi.utility;
+package xyz.aizuchi.comicutility;
 
 import java.io.File;
 import static java.io.File.separator;
@@ -26,8 +26,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import xyz.aizuchi.comicrack.ComicInfo;
 import xyz.aizuchi.comicrack.FileTree;
-import static xyz.aizuchi.utility.ComicRack.formatCBName;
 import static java.nio.file.Files.move;
+import static xyz.aizuchi.comicutility.ComicRack.formatCBName;
 
 /**
  *
