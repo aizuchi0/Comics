@@ -73,6 +73,7 @@ public class ComicCLI {
             if (line.hasOption("S")) {
                 //Start the server
                 Server.startServer();
+                return;
             }
             if (line.hasOption("R")) {
                 overWrite = true;
