@@ -1,5 +1,5 @@
-/*
- * Copyright (C) 2014 Daniel Crawford <daniel-crawford@uiowa.edu>
+/* 
+ * Copyright (C) 2019 Daniel Crawford <daniel-crawford@uiowa.edu>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
