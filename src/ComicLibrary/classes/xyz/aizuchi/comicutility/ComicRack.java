@@ -25,11 +25,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.UnmarshallerHandler;
 import javax.xml.parsers.SAXParser;
 import xyz.aizuchi.comicrack.ComicInfo;
 
@@ -39,9 +34,9 @@ import xyz.aizuchi.comicrack.ComicInfo;
  */
 public class ComicRack {
 
-    private Unmarshaller unmarshaller;
-    private UnmarshallerHandler unmarshallerHandler;
-    private JAXBContext jc;
+//    private Unmarshaller unmarshaller;
+//    private UnmarshallerHandler unmarshallerHandler;
+    private JAXBRIContext jc;
 
     public ComicRack() {
     }
@@ -57,7 +52,7 @@ public class ComicRack {
                 return null;
             }
             comicInfoStream = archive.getInputStream(comicInfo);
-            jc = JAXBContext.newInstance(ComicInfo.class);
+            jc = JAXBRIContext.newInstance(ComicInfo.class);
             unmarshaller = jc.createUnmarshaller();
             unmarshallerHandler = unmarshaller.getUnmarshallerHandler();
             return (ComicInfo) unmarshaller.unmarshal(comicInfoStream);
