@@ -25,12 +25,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.traversal.DocumentTraversal;
+import org.w3c.dom.traversal.NodeFilter;
+import org.w3c.dom.traversal.TreeWalker;
 import org.xml.sax.SAXException;
 import xyz.aizuchi.comicrack.ComicInfo;
 
@@ -46,6 +49,10 @@ public class ComicRack {
     public ComicInfo loadComicRackXML(File CBZFile) {
         ZipFile archive = null;
         InputStream comicInfoStream = null;
+        DocumentBuilderFactory builder;
+        DocumentBuilder parser;
+        Document document;
+
         try {
             archive = new ZipFile(CBZFile);
             ZipEntry comicInfoXML = archive.getEntry("ComicInfo.xml");
@@ -55,9 +62,19 @@ public class ComicRack {
             comicInfoStream = archive.getInputStream(comicInfoXML);
             ComicInfo jc = new ComicInfo();
             try {
-                DocumentBuilder builder;
-                builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-                Document document = builder.parse(comicInfoStream);
+                builder = DocumentBuilderFactory.newInstance();
+                builder.setValidating(false);
+                builder.setNamespaceAware(true);
+                builder.setAttribute("http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+                        XMLConstants.W3C_XML_SCHEMA_NS_URI);
+                parser = builder.newDocumentBuilder();
+                document = parser.parse(comicInfoStream);
+                DocumentTraversal traversal = (DocumentTraversal) document;
+                TreeWalker walker = traversal.createTreeWalker(
+                        document.getDocumentElement(),
+                        NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT,
+                        null, true);
+                traverseLevel(walker, "");
             } catch (ParserConfigurationException | SAXException ex) {
                 Logger.getLogger(ComicRack.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -119,41 +136,31 @@ public class ComicRack {
         return newName;
     }
 
-    /* Process all the nodes, recursively. */
-    protected void doRecursive(Node p) {
-        if (p == null) {
-            return;
+    private static void traverseLevel(TreeWalker walker,
+            String indent) {
+
+        Node node = walker.getCurrentNode();
+
+        if (node.getNodeType() == Node.ELEMENT_NODE) {
+            System.out.println(indent + node.getNodeName());
         }
-        NodeList nodes = p.getChildNodes();
-//        System.out.println("xml-tree", "Element has " + nodes.getLength() + " children");
-        for (int i = 0; i < nodes.getLength(); i++) {
-            Node n = nodes.item(i);
-            if (n == null) {
-                continue;
+
+        if (node.getNodeType() == Node.TEXT_NODE) {
+
+            String content_trimmed = node.getTextContent().trim();
+
+            if (content_trimmed.length() > 0) {
+                System.out.print(indent);
+                System.out.printf("%s%n", content_trimmed);
             }
-            doNode(n);
         }
-    }
 
-    protected void doNode(Node n) {
-        switch (n.getNodeType()) {
-            case Node.ELEMENT_NODE:
-                System.out.println("ELEMENT<" + n.getNodeName() + ">");
-                doRecursive(n);
-                break;
-            case Node.TEXT_NODE:
-                String text = n.getNodeValue();
-                if (text.length() == 0
-                        || text.equals("\n") || text.equals("\\r")) {
-                    break;
-                }
-                System.out.println("TEXT: " + text);
-                break;
-            default:
-                System.err.println("OTHER NODE "
-                        + n.getNodeType() + ": " + n.getClass());
-                break;
+        for (Node n = walker.firstChild(); n != null;
+                n = walker.nextSibling()) {
+
+            traverseLevel(walker, indent + "  ");
         }
-    }
 
+        walker.setCurrentNode(node);
+    }
 }
