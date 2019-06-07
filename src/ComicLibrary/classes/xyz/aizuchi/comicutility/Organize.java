@@ -55,9 +55,9 @@ public class Organize {
             try {
                 series = comicBook.getSeries().replaceAll("[^a-zA-Z0-9\\._]+", "_");
                 assert series != null;
-                File destDir = new File(outputDir.toString() + separator + series);
+                File destDir = new File(outputDir.toString() + separator + series).getAbsoluteFile();
                 destDir.mkdirs();
-                File destFile = new File(outputDir.toString() + separator + series + separator + formatCBName(comicBook));
+                File destFile = new File(outputDir.toString() + separator + series + separator + formatCBName(comicBook)).getAbsoluteFile();
                 try {
                     WOODY.log(Level.INFO, "Move \"{0}\" to \"{1}\"", new Object[]{currentComic.getCanonicalPath(), destFile.getCanonicalPath()});
                     if (!dryRun) {
