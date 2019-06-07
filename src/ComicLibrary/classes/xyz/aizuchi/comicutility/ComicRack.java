@@ -25,7 +25,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 import xyz.aizuchi.comicrack.ComicInfo;
 
 /**
@@ -34,29 +40,29 @@ import xyz.aizuchi.comicrack.ComicInfo;
  */
 public class ComicRack {
 
-//    private Unmarshaller unmarshaller;
-//    private UnmarshallerHandler unmarshallerHandler;
-    private JAXBRIContext jc;
-
     public ComicRack() {
     }
 
     public ComicInfo loadComicRackXML(File CBZFile) {
         ZipFile archive = null;
         InputStream comicInfoStream = null;
-        SAXParser parser = null;
         try {
             archive = new ZipFile(CBZFile);
-            ZipEntry comicInfo = archive.getEntry("ComicInfo.xml");
-            if (comicInfo == null) {
+            ZipEntry comicInfoXML = archive.getEntry("ComicInfo.xml");
+            if (comicInfoXML == null) {
                 return null;
             }
-            comicInfoStream = archive.getInputStream(comicInfo);
-            jc = JAXBRIContext.newInstance(ComicInfo.class);
-            unmarshaller = jc.createUnmarshaller();
-            unmarshallerHandler = unmarshaller.getUnmarshallerHandler();
-            return (ComicInfo) unmarshaller.unmarshal(comicInfoStream);
-        } catch (JAXBException | IOException | NullPointerException ex) {
+            comicInfoStream = archive.getInputStream(comicInfoXML);
+            ComicInfo jc = new ComicInfo();
+            try {
+                DocumentBuilder builder;
+                builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+                Document document = builder.parse(comicInfoStream);
+            } catch (ParserConfigurationException | SAXException ex) {
+                Logger.getLogger(ComicRack.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return jc;
+        } catch (IOException ex) {
             Logger.getLogger(ComicRack.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
@@ -70,18 +76,6 @@ public class ComicRack {
             }
         }
         return null;
-    }
-
-    public void spitItOut() {
-        try {
-            Object root = unmarshallerHandler.getResult();
-            Marshaller marshaller = jc.createMarshaller();
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            marshaller.marshal(root, System.out);
-        } catch (JAXBException | IllegalStateException ex) {
-            Logger.getLogger(ComicRack.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
     }
 
     public static String getNumber(ComicInfo comicBook) {
@@ -124,4 +118,42 @@ public class ComicRack {
         newName = newName.replaceAll("[^a-zA-Z0-9\\._]+", "_");
         return newName;
     }
+
+    /* Process all the nodes, recursively. */
+    protected void doRecursive(Node p) {
+        if (p == null) {
+            return;
+        }
+        NodeList nodes = p.getChildNodes();
+//        System.out.println("xml-tree", "Element has " + nodes.getLength() + " children");
+        for (int i = 0; i < nodes.getLength(); i++) {
+            Node n = nodes.item(i);
+            if (n == null) {
+                continue;
+            }
+            doNode(n);
+        }
+    }
+
+    protected void doNode(Node n) {
+        switch (n.getNodeType()) {
+            case Node.ELEMENT_NODE:
+                System.out.println("ELEMENT<" + n.getNodeName() + ">");
+                doRecursive(n);
+                break;
+            case Node.TEXT_NODE:
+                String text = n.getNodeValue();
+                if (text.length() == 0
+                        || text.equals("\n") || text.equals("\\r")) {
+                    break;
+                }
+                System.out.println("TEXT: " + text);
+                break;
+            default:
+                System.err.println("OTHER NODE "
+                        + n.getNodeType() + ": " + n.getClass());
+                break;
+        }
+    }
+
 }

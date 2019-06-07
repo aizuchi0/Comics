@@ -26,7 +26,6 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import static xyz.aizuchi.comicutility.Organize.moveComics;
-import xyz.aizuchi.comicutility.Server;
 
 /**
  *
@@ -37,6 +36,7 @@ public class ComicCLI {
     private static boolean keepLarger = false;
     private static boolean overWrite = false;
     static final Logger WOODY = Logger.getLogger("xyz.aizuchi.ComicCLI");
+    private static boolean dryRun = false;
 
     /**
      * @param args the command line arguments
@@ -59,6 +59,7 @@ public class ComicCLI {
         options.addOption("R", "overwrite", false, "When moving files, clobber any existing files.");
         options.addOption("L", "keep-larger", false, "When moving files, overwrite if -d file is larger than -o file.");
         options.addOption("S", "Server", false, "Start the comics server.");
+        options.addOption("n", "dry-run", false, "perform a trial run with no changes made");
         // automatically generate the help statement
         HelpFormatter formatter = new HelpFormatter();
 
@@ -70,14 +71,18 @@ public class ComicCLI {
                 formatter.printHelp(appname, options, true);
                 return;
             }
-            if (line.hasOption("S")) {
-                //Start the server
-                Server.startServer();
-                return;
-            }
+//            if (line.hasOption("S")) {
+//                //Start the server
+//                Server.startServer();
+//                return;
+//            }
             if (line.hasOption("R")) {
                 overWrite = true;
                 WOODY.log(Level.INFO,"Turning on overwrite; will clobber files.");
+            }
+            if (line.hasOption("n")) {
+                dryRun = true;
+                WOODY.log(Level.INFO,"Dry-run, not performing any actions.");
             }
             if (line.hasOption("L")) {
                 overWrite = false;
@@ -111,6 +116,6 @@ public class ComicCLI {
             WOODY.log(Level.SEVERE, "Parsing failed.  Reason: {0}", exp.getMessage());
         }
 
-        moveComics( direct,  outputDir,  keepLarger,  overWrite);
+        moveComics( direct,  outputDir,  keepLarger,  overWrite, dryRun);
     }
 }

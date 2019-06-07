@@ -40,7 +40,7 @@ public class Organize {
     public Organize() {
     }
 
-    public static void moveComics(File direct, File outputDir, boolean keepLarger, boolean overWrite) {
+    public static void moveComics(File direct, File outputDir, boolean keepLarger, boolean overWrite, boolean dryRun) {
         assert outputDir != null;
         FileTree cl = new FileTree();
         cl.setFileList(direct);
@@ -60,18 +60,20 @@ public class Organize {
                 File destFile = new File(outputDir.toString() + separator + series + separator + formatCBName(comicBook));
                 try {
                     WOODY.log(Level.INFO, "Move \"{0}\" to \"{1}\"", new Object[]{currentComic.getCanonicalPath(), destFile.getCanonicalPath()});
-                    if (keepLarger) {
-                        //If keepLarger, check for larger file. If currentComic is larger, REPLACE_EXISTING. Otherwise, keep destFile.
-                        if (currentComic.length() > destFile.length() || !destFile.exists()) {
+                    if (!dryRun) {
+                        if (keepLarger) {
+                            //If keepLarger, check for larger file. If currentComic is larger, REPLACE_EXISTING. Otherwise, keep destFile.
+                            if (currentComic.length() > destFile.length() || !destFile.exists()) {
+                                move(currentComic.toPath(), destFile.toPath(), REPLACE_EXISTING);
+                            } else {
+                                currentComic.delete();
+                            }
+                        }
+                        if (overWrite) {
                             move(currentComic.toPath(), destFile.toPath(), REPLACE_EXISTING);
                         } else {
-                            currentComic.delete();
+                            move(currentComic.toPath(), destFile.toPath());
                         }
-                    }
-                    if (overWrite) {
-                        move(currentComic.toPath(), destFile.toPath(), REPLACE_EXISTING);
-                    } else {
-                        move(currentComic.toPath(), destFile.toPath());
                     }
                 } catch (FileAlreadyExistsException ex) {
                     WOODY.log(Level.SEVERE, "File: {0} already exists. Retry with -R to clobber.", destFile.toString());
