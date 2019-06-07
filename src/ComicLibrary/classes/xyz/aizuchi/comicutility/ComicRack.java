@@ -36,12 +36,16 @@ import org.w3c.dom.traversal.NodeFilter;
 import org.w3c.dom.traversal.TreeWalker;
 import org.xml.sax.SAXException;
 import xyz.aizuchi.comicrack.ComicInfo;
+import xyz.aizuchi.comicrack.YesNo;
 
 /**
  *
  * @author Daniel Crawford <daniel-crawford@uiowa.edu>
  */
 public class ComicRack {
+
+    ComicInfo jc;
+    String key = null;
 
     public ComicRack() {
     }
@@ -60,7 +64,7 @@ public class ComicRack {
                 return null;
             }
             comicInfoStream = archive.getInputStream(comicInfoXML);
-            ComicInfo jc = new ComicInfo();
+            jc = new ComicInfo();
             try {
                 builder = DocumentBuilderFactory.newInstance();
                 builder.setValidating(false);
@@ -136,22 +140,113 @@ public class ComicRack {
         return newName;
     }
 
-    private static void traverseLevel(TreeWalker walker,
-            String indent) {
+    private void traverseLevel(TreeWalker walker, String indent) {
 
         Node node = walker.getCurrentNode();
 
         if (node.getNodeType() == Node.ELEMENT_NODE) {
-            System.out.println(indent + node.getNodeName());
+//            System.out.println(node.getNodeName());
+            key = node.getNodeName();
         }
 
         if (node.getNodeType() == Node.TEXT_NODE) {
 
             String content_trimmed = node.getTextContent().trim();
 
-            if (content_trimmed.length() > 0) {
-                System.out.print(indent);
-                System.out.printf("%s%n", content_trimmed);
+            if (content_trimmed.length() > 0 && key != null) {
+                switch (key) {
+                    case "Title":
+                        jc.setTitle(content_trimmed);
+                        break;
+                    case "Number":
+                        jc.setNumber(content_trimmed);
+                        break;
+                    case "Year":
+                        jc.setYear(Integer.valueOf(content_trimmed));
+                        break;
+                    case "Series":
+                        jc.setSeries(content_trimmed);
+                        break;
+                    case "Count":
+                        jc.setCount(Integer.valueOf(content_trimmed));
+                        break;
+                    case "Volume":
+                        jc.setVolume(Integer.valueOf(content_trimmed));
+                        break;
+                    case "AlternateSeries":
+                        jc.setAlternateSeries(content_trimmed);
+                        break;
+                    case "AlternateNumber":
+                        jc.setAlternateNumber(content_trimmed);
+                        break;
+                    case "AlternateCount":
+                        jc.setAlternateCount(Integer.valueOf(content_trimmed));
+                        break;
+                    case "Summary":
+                        jc.setSummary(content_trimmed);
+                        break;
+                    case "Notes":
+                        jc.setNotes(content_trimmed);
+                        break;
+                    case "Month":
+                        jc.setMonth(Integer.valueOf(content_trimmed));
+                        break;
+                    case "Writer":
+                        jc.setWriter(content_trimmed);
+                        break;
+                    case "Penciller":
+                        jc.setPenciller(content_trimmed);
+                        break;
+                    case "Inker":
+                        jc.setInker(content_trimmed);
+                        break;
+                    case "Colorist":
+                        jc.setColorist(content_trimmed);
+                        break;
+                    case "Letterer":
+                        jc.setLetterer(content_trimmed);
+                        break;
+                    case "CoverArtist":
+                        jc.setCoverArtist(content_trimmed);
+                        break;
+                    case "Editor":
+                        jc.setEditor(content_trimmed);
+                        break;
+                    case "Publisher":
+                        jc.setPublisher(content_trimmed);
+                        break;
+                    case "Imprint":
+                        jc.setImprint(content_trimmed);
+                        break;
+                    case "Genre":
+                        jc.setGenre(content_trimmed);
+                        break;
+                    case "Web":
+                        jc.setWeb(content_trimmed);
+                        break;
+                    case "PageCount":
+                        jc.setPageCount(Integer.valueOf(content_trimmed));
+                        break;
+                    case "LanguageISO":
+                        jc.setLanguageISO(content_trimmed);
+                        break;
+                    case "Format":
+                        jc.setFormat(content_trimmed);
+                        break;
+                    case "BlackAndWhite":
+                        jc.setBlackAndWhite(YesNo.fromValue(content_trimmed));
+                        break;
+                    case "Manga":
+                        jc.setManga(YesNo.fromValue(content_trimmed));
+                        break;
+                    case "Pages":
+//                        jc.setPages(value);
+                        break;
+                    default:
+                }
+
+//                System.out.print(indent);
+//                System.out.printf("%s%n", content_trimmed);
             }
         }
 
