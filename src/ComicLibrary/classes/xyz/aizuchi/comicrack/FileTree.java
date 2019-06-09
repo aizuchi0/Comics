@@ -36,6 +36,7 @@ public class FileTree {
 
     /**
      * Given a File directory, list all the CBZ files in it recursively.
+     *
      * @param dirRoot The directory to be listed, as a File object
      */
     public void setFileList(File dirRoot) {
@@ -46,18 +47,21 @@ public class FileTree {
         ff = new NestedFF();
         List<String> directories;
         directories = Arrays.asList(dirRoot.getAbsolutePath());
-        for (String dir : directories) {
+        directories.stream().map((dir) -> {
             fileList.addAll(Arrays.asList(new java.io.File(dir).listFiles(ff)));
+            return dir;
+        }).forEachOrdered((dir) -> {
             for (File listing : new java.io.File(dir).listFiles()) {
                 if (listing.isDirectory()) {
                     this.setFileList(listing);
                 }
             }
-        }
+        });
     }
 
     /**
      * Given a String directory, list all the CBZ files in it recursively.
+     *
      * @param dirRoot The directory to be listed, e.g. "/tmp/foo".
      */
     public void setFileList(String dirRoot) {
@@ -82,6 +86,5 @@ public class FileTree {
             return s.endsWith(".cbz");
         }
     }
-    
-    
+
 }

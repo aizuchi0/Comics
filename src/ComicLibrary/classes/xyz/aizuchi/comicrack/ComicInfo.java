@@ -1,54 +1,71 @@
 package xyz.aizuchi.comicrack;
 
+//<?xml version="1.0"?>
+//<ComicInfo xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+//  <Title>Why We Fight Part 2 of 3</Title>
+//  <Series>War of the Realms: Spider-Man &amp; the League of Realms</Series>
+//  <Number>2</Number>
+//  <StoryArc>The War of the Realms</StoryArc>
+//  <Summary>WAR OF THE REALMS TIE-IN!
+//
+//In order to win the War of the Realms, we need a LEAGUE OF REALMS!
+//
+//Thor once led this team with one representive from each fantastical realm, but the League has a NEW leader and representative of Midgard- SPIDER-MAN!
+//
+//Spider-Man must Frodo-Up and lead this ragtag group of SCREWBEARD THE DWARF, UD THE TROLL, RO BLOODROOT THE WIZARD, SIR IVORY HONEYSHOT THE LIGHT ELF and TITANYA THE MOUNTAIN GIANT! But who will represent ASGARD?!
+//
+//And, as Spidey is a terrible leader, could this team possibly achieve ANYTHING?!
+//
+//*List of covers and their creators:*
+// Cover | Name          | Creator(s)                             | Sidebar Location |
+//--------------------------------------------------------------------------------
+// Reg   | Regular Cover | Ken Lashley &amp; Brian Reber              | 1                |
+// Var   | Variant Cover | Lan Medina, John Livesay &amp; Brian Reber | 2                |</Summary>
+//  <Notes>Tagged with ComicTagger 1.1.31-rc1 using info from Comic Vine on 2019-06-07 16:10:18.  [Issue ID 710123]</Notes>
+//  <Year>2019</Year>
+//  <Month>7</Month>
+//  <Day>1</Day>
+//  <Writer>Sean Ryan</Writer>
+//  <Penciller>Nico Leon</Penciller>
+//  <Inker>Nico Leon</Inker>
+//  <Colorist>Carlos Lopez</Colorist>
+//  <Letterer>Joe Caramagna</Letterer>
+//  <CoverArtist>Brian Reber, John Livesay, Ken Lashley, Lan Medina</CoverArtist>
+//  <Editor>Kathleen Wisneski, Nick Lowe</Editor>
+//  <Publisher>Marvel</Publisher>
+//  <Web>https://comicvine.gamespot.com/war-of-the-realms-spider-man-and-the-league-of-rea/4000-710123/</Web>
+//  <PageCount>23</PageCount>
+//  <Characters>Fernande, Ivory Honeyshot, Lady Waziria, Malekith, Ro Bloodroot, Screwbeard, Spider-Man, Titanya Vaetilda Vinnsuvius, Ud</Characters>
+//  <Teams>Angels, Dark Elves, League of Realms</Teams>
+//  <Locations>Lagos, Vatican City</Locations>
+//  <Pages>
+//    <Page Image="0" ImageSize="478646" Type="FrontCover" />
+//    <Page Image="1" ImageSize="378615" />
+//    <Page Image="2" ImageSize="371011" />
+//    <Page Image="3" ImageSize="407768" />
+//    <Page Image="4" ImageSize="439718" />
+//    <Page Image="5" ImageSize="429793" />
+//    <Page Image="6" ImageSize="520203" />
+//    <Page Image="7" ImageSize="462895" />
+//    <Page Image="8" ImageSize="504911" />
+//    <Page Image="9" ImageSize="531466" />
+//    <Page Image="10" ImageSize="507467" />
+//    <Page Image="11" ImageSize="408003" />
+//    <Page Image="12" ImageSize="549867" />
+//    <Page Image="13" ImageSize="517200" />
+//    <Page Image="14" ImageSize="504189" />
+//    <Page Image="15" ImageSize="569167" />
+//    <Page Image="16" ImageSize="554710" />
+//    <Page Image="17" ImageSize="449546" />
+//    <Page Image="18" ImageSize="502302" />
+//    <Page Image="19" ImageSize="558219" />
+//    <Page Image="20" ImageSize="519566" />
+//    <Page Image="21" ImageSize="605531" />
+//    <Page Image="22" ImageSize="371151" />
+//  </Pages>
+//</ComicInfo>
 
 
-/**
- * <p>Java class for ComicInfo complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * 
- * <pre>
- * &lt;complexType name="ComicInfo">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="Title" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="Series" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="Number" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="Count" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *         &lt;element name="Volume" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *         &lt;element name="AlternateSeries" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="AlternateNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="AlternateCount" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *         &lt;element name="Summary" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="Notes" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="Year" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *         &lt;element name="Month" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *         &lt;element name="Writer" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="Penciller" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="Inker" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="Colorist" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="Letterer" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="CoverArtist" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="Editor" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="Publisher" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="Imprint" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="Genre" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="Web" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="PageCount" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *         &lt;element name="LanguageISO" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="Format" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="BlackAndWhite" type="{}YesNo" minOccurs="0"/>
- *         &lt;element name="Manga" type="{}YesNo" minOccurs="0"/>
- *         &lt;element name="Pages" type="{}ArrayOfComicPageInfo" minOccurs="0"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
- */
 public class ComicInfo {
 
     protected String title;
@@ -79,7 +96,6 @@ public class ComicInfo {
     protected String format;
     protected YesNo blackAndWhite;
     protected YesNo manga;
-    protected ArrayOfComicPageInfo pages;
 
     /**
      * Gets the value of the title property.
@@ -753,28 +769,5 @@ public class ComicInfo {
         this.manga = value;
     }
 
-    /**
-     * Gets the value of the pages property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfComicPageInfo }
-     *     
-     */
-    public ArrayOfComicPageInfo getPages() {
-        return pages;
-    }
-
-    /**
-     * Sets the value of the pages property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfComicPageInfo }
-     *     
-     */
-    public void setPages(ArrayOfComicPageInfo value) {
-        this.pages = value;
-    }
 
 }
