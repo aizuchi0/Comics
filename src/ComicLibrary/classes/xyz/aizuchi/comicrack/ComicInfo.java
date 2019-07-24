@@ -2,9 +2,6 @@ package xyz.aizuchi.comicrack;
 
 //<?xml version="1.0"?>
 //<ComicInfo xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-//  <Title>Why We Fight Part 2 of 3</Title>
-//  <Series>War of the Realms: Spider-Man &amp; the League of Realms</Series>
-//  <Number>2</Number>
 //  <StoryArc>The War of the Realms</StoryArc>
 //  <Summary>WAR OF THE REALMS TIE-IN!
 //
